@@ -46,9 +46,15 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  user.findById(id, { password: 0 }, function (err, user) {
-    done(err, user);
-  });
+  user
+    .findById(id, { password: 0 })
+    .populate({
+      path: 'friends',
+      populate: { path: 'mySentRequests myFriendRequests myFriends' },
+    })
+    .exec((err, user) => {
+      done(err, user);
+    });
 });
 
 router.use(passport.initialize());
