@@ -6,6 +6,7 @@ let userSchema = new mongoose.Schema({
   email: String,
   googleId: String,
   password: String,
+  designation:String,
   provider: String,
   isVerified: String,
   picture_url: String,
@@ -14,11 +15,9 @@ let userSchema = new mongoose.Schema({
   gender: String,
   website: String,
   birthday: String,
-  address: {
-    city: { type: String },
-    state: { type: String },
-    zip: { type: Number },
-  },
+  city: String ,
+  state:  String ,
+  zip: Number ,
 });
 
 module.exports = mongoose.model('user', userSchema);
