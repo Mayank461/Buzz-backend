@@ -66,6 +66,9 @@ router.post('/deleteRequest/:id', async (req, res) => {
     myUser.friends.mySentRequests.pull(friendUser._id);
     friendUser.friends.myFriendRequests.pull(myUser._id);
 
+    myUser.friends.myFriendRequests.pull(friendUser._id);
+    friendUser.friends.mySentRequests.pull(myUser._id);
+
     await friendUser.save();
     await myUser.save();
 
