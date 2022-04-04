@@ -10,6 +10,10 @@ let userSchema = new mongoose.Schema({
   provider: String,
   isVerified: String,
   picture_url: String,
+  posts:[{
+    post_url:{type: String},
+    post_caption: {type: String}
+  }],
   cover_url: String,
   bio: String,
   gender: String,
@@ -19,5 +23,6 @@ let userSchema = new mongoose.Schema({
   state:  String ,
   zip: Number ,
 });
+
 
 module.exports = mongoose.model('user', userSchema);
