@@ -16,6 +16,7 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       // find if a user exist with this email or not
+
       user.findOne({ email: profile.emails[0].value }, (err, data) => {
         if (data) {
           // user exists
