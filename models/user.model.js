@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 
 const userSchema = new mongoose.Schema({
   firstname: String,
@@ -11,10 +10,12 @@ const userSchema = new mongoose.Schema({
   provider: String,
   isVerified: String,
   picture_url: String,
-  posts:[{
-    post_url:{type: String},
-    post_caption: {type: String}
-  }],
+  posts: [
+    {
+      post_url: { type: String },
+      post_caption: { type: String },
+    },
+  ],
   cover_url: String,
   bio: String,
   gender: String,
@@ -23,12 +24,12 @@ const userSchema = new mongoose.Schema({
   city: String,
   state: String,
   zip: Number,
+  moderator: { type: Boolean, default: false },
   friends: {
     myFriends: [{ type: Schema.Types.ObjectId, ref: 'user' }],
     mySentRequests: [{ type: Schema.Types.ObjectId, ref: 'user' }],
     myFriendRequests: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
 });
-
 
 module.exports = mongoose.model('user', userSchema);

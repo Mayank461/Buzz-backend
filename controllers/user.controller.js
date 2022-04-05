@@ -1,17 +1,14 @@
-const userModel = require('../models/userModel');
-const router = require('./auth');
+const user = require('../services/user.service');
 
-const express = require('express').Router();
+module.exports.getAll = async (req, res) => {
+  const response = await user.getAll();
+  res.send(response);
+};
 
-router.get('/getUser', async (req, res) => {
-  const user = await userModel.find();
-  res.send(user);
-});
-
-router.post('/sendRequest/:id', async (req, res) => {
+module.exports.sendRequest = async (req, res) => {
   try {
-    const myUser = await userModel.findById(req.user.id);
-    const friendUser = await userModel.findById(req.params.id);
+    const myUser = await user.getByID(req.user.id);
+    const friendUser = await user.getByID(req.params.id);
 
     if (myUser.friends.myFriends.includes(req.params.id))
       return res.status(400).send('Already added to your Friend list');
@@ -25,14 +22,13 @@ router.post('/sendRequest/:id', async (req, res) => {
     res.send('friend request sent');
   } catch (error) {
     res.sendStatus(400);
-    console.log(error.message);
   }
-});
+};
 
-router.post('/confirmRequest/:id', async (req, res) => {
+module.exports.confirmRequest = async (req, res) => {
   try {
-    const myUser = await userModel.findById(req.user.id);
-    const friendUser = await userModel.findById(req.params.id);
+    const myUser = await user.getByID(req.user.id);
+    const friendUser = await user.getByID(req.params.id);
 
     if (myUser.friends.myFriends.includes(req.params.id))
       return res.status(400).send('Already in your Friend list');
@@ -52,12 +48,12 @@ router.post('/confirmRequest/:id', async (req, res) => {
     res.sendStatus(400);
     console.log(error.message);
   }
-});
+};
 
-router.post('/deleteRequest/:id', async (req, res) => {
+module.exports.deleteOrCancelRequest = async (req, res) => {
   try {
-    const myUser = await userModel.findById(req.user.id);
-    const friendUser = await userModel.findById(req.params.id);
+    const myUser = await user.getByID(req.user.id);
+    const friendUser = await user.getByID(req.params.id);
 
     if (myUser.friends.myFriends.includes(req.params.id))
       return res.status(400).send('Already in your Friend list');
@@ -77,6 +73,23 @@ router.post('/deleteRequest/:id', async (req, res) => {
     res.sendStatus(400);
     console.log(error.message);
   }
-});
+};
 
-module.exports = router;
+module.exports.updateProfile = async (req, res) => {
+  try {
+    await user.updateUser(req.params.id, {
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      designation: req.body.designation,
+      website: req.body.website,
+      gender: req.body.gender,
+      birthday: req.body.birthday,
+      city: req.body.city,
+      state: req.body.state,
+      zip: req.body.zip,
+    });
+  } catch (error) {
+    res.sendStatus(400);
+    console.log(error.message);
+  }
+};

@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const passport = require('passport');
+const bcrypt = require('bcrypt');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
+
 const user = require('../models/userModel');
 const { API_URL, CLIENT_URL } = require('../config');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
 
 const clientID = process.env.G_CLIENT_ID;
 const clientSecret = process.env.G_CLIENT_SECRET;
@@ -83,9 +84,9 @@ passport.deserializeUser(function (id, done) {
 router.use(passport.initialize());
 router.use(passport.session());
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send('success');
-});
+router.post('/login', passport.authenticate('local'), (req, res) =>
+  res.send('success')
+);
 
 router.get(
   '/google',
@@ -108,7 +109,7 @@ router.get('/login/success', (req, res) => {
   } else res.json({ success: false });
 });
 
-router.get('/logout', function (req, res) {
+router.get('/logout', (req, res) => {
   req.logout();
   req.session = null;
   res.redirect(CLIENT_URL);
