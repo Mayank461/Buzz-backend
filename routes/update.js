@@ -23,7 +23,6 @@ router.post('/updateUser/:id',async(req,res)=>{
         }
     });
     console.log("data updated")
-   
 
 })
 

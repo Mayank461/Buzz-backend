@@ -16,7 +16,6 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(
   cookieSession({ name: 'session', keys: ['test'], maxAge: 24 * 60 * 60 * 100 })
 );
