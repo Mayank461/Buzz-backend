@@ -4,6 +4,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const user = require('../models/userModel');
 const { API_URL, CLIENT_URL } = require('../config');
 const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
 
 const clientID = process.env.G_CLIENT_ID;
 const clientSecret = process.env.G_CLIENT_SECRET;
@@ -43,36 +44,25 @@ passport.use(
   )
 );
 
-
-passport.use(  
-  new LocalStrategy(async(email,password,done) => {
-      // find if a user exist with this email or not
-     await user.findOne({email}, (err, data) => {
-        if (data) {
-          // user exists
+passport.use(
+  new LocalStrategy((email, password, done) => {
+    user.findOne({ email }, (err, data) => {
+      const salt = bcrypt.genSaltSync(10);
+      if (data) {
+        if (data.password && bcrypt.compareSync(password, data.password))
           return done(null, data);
-        }
-        if(user.password!==password)
-        {
-            return done(null,false)
-        }
-        else {
-          console.log('user created');
-          // create a user
-          user({
-           
-            email: email, 
-            password: password,
-            
-          }).save((err, data) => {
-            return done(null, data);
-          });
-        }
-      });
-    }
-  )
+        return done(null, false, {
+          message: 'incorrect password',
+        });
+      } else {
+        const passHash = bcrypt.hashSync(password, salt);
+        user({ email, password: passHash }).save((err, data) => {
+          return done(null, data);
+        });
+      }
+    });
+  })
 );
-
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -90,29 +80,12 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
-
-
-
 router.use(passport.initialize());
 router.use(passport.session());
 
-
-router.get(
-  '/localLogin',
-  passport.authenticate('local', {
-    scope: ['email', 'password'],
-  })
-);
-
-
-router.get(
-  '/localStrategy',
-  passport.authenticate('local', {
-    failureRedirect: `/login/success`,
-    successRedirect: `${CLIENT_URL}`,
-  })
-); 
-
+router.post('/login', passport.authenticate('local'), (req, res) => {
+  res.send('success');
+});
 
 router.get(
   '/google',
@@ -120,10 +93,6 @@ router.get(
     scope: ['profile', 'email'],
   })
 );
-
-
-
-
 
 router.get(
   '/google/callback',
@@ -133,9 +102,6 @@ router.get(
   })
 );
 
-
-
-
 router.get('/login/success', (req, res) => {
   if (req.user) {
     res.json({ user: req.user, success: true });
@@ -144,6 +110,7 @@ router.get('/login/success', (req, res) => {
 
 router.get('/logout', function (req, res) {
   req.logout();
+  req.session = null;
   res.redirect(CLIENT_URL);
 });
 

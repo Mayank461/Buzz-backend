@@ -16,9 +16,19 @@ app.use(
     credentials: true,
   })
 );
-app.use(
-  cookieSession({ name: 'session', keys: ['test'], maxAge: 24 * 60 * 60 * 100 })
-);
+
+const session = cookieSession({
+  secret: 'sessionSecret',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    secureProxy: true,
+    httpOnly: true,
+    expires: 24 * 60 * 60 * 100,
+  },
+});
+
+app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
