@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
   provider: String,
   isVerified: String,
   picture_url: String,
+  posts:[{
+    post_url:{type: String},
+    post_caption: {type: String}
+  }],
   cover_url: String,
   bio: String,
   gender: String,
@@ -25,5 +29,6 @@ const userSchema = new mongoose.Schema({
     myFriendRequests: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
 });
+
 
 module.exports = mongoose.model('user', userSchema);
