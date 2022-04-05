@@ -43,34 +43,34 @@ passport.use(
 );
 
 
-passport.use(  
-  new LocalStrategy(async(email,password,done) => {
-      // find if a user exist with this email or not
-     await user.findOne({email}, (err, data) => {
-        if (data) {
-          // user exists
-          return done(null, data);
-        }
-        if(user.password!==password)
-        {
-            return done(null,false)
-        }
-        else {
-          console.log('user created');
-          // create a user
-          user({
+// passport.use(  
+//   new LocalStrategy(async(email,password,done) => {
+//       // find if a user exist with this email or not
+//      await user.findOne({email}, (err, data) => {
+//         if (data) {
+//           // user exists
+//           return done(null, data);
+//         }
+//         if(user.password!==password)
+//         {
+//             return done(null,false)
+//         }
+//         else {
+//           console.log('user created');
+//           // create a user
+//           user({
            
-            email: email, 
-            password: password,
+//             email: email, 
+//             password: password,
             
-          }).save((err, data) => {
-            return done(null, data);
-          });
-        }
-      });
-    }
-  )
-);
+//           }).save((err, data) => {
+//             return done(null, data);
+//           });
+//         }
+//       });
+//     }
+//   )
+// );
 
 
 passport.serializeUser(function (user, done) {
@@ -90,21 +90,21 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 
-router.get(
-  '/localLogin',
-  passport.authenticate('local', {
-    scope: ['email', 'password'],
-  })
-);
+// router.get(
+//   '/localLogin',
+//   passport.authenticate('local', {
+//     scope: ['email', 'password'],
+//   })
+// );
 
 
-router.get(
-  '/localStrategy',
-  passport.authenticate('local', {
-    failureRedirect: `/login/success`,
-    successRedirect: `${CLIENT_URL}`,
-  })
-); 
+// router.get(
+//   '/localStrategy',
+//   passport.authenticate('local', {
+//     failureRedirect: `/login/success`,
+//     successRedirect: `${CLIENT_URL}`,
+//   })
+// ); 
 
 
 router.get(
