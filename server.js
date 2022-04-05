@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 require('dotenv').config();
 const cors = require('cors');
-const user = require('./models/userModel');
 const { CLIENT_URL } = require('./config');
 
 const app = express();

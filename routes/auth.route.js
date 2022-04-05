@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 
-const user = require('../models/userModel');
+const user = require('../models/user.model');
 const { API_URL, CLIENT_URL } = require('../config');
 
 const clientID = process.env.G_CLIENT_ID;
