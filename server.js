@@ -1,14 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const app = express();
-require('dotenv').config();
-const user = require('./models/userModel');
-const cors = require('cors');
 const cookieSession = require('cookie-session');
+require('dotenv').config();
+const cors = require('cors');
 const { CLIENT_URL } = require('./config');
 
-// middleware
+const app = express();
 
+// middleware
 app.use(
   cors({
     origin: CLIENT_URL,
