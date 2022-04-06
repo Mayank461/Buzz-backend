@@ -4,10 +4,76 @@ module.exports.getAll = async () => {
   return await User.find();
 };
 
-module.exports.getByID = async (id) => {
-  return await User.findById(id);
+module.exports.updateUser = async (id, updateObj) => {
+  try {
+    await User.findByIdAndUpdate(id, updateObj);
+    return { status: 200 };
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
 };
 
-module.exports.updateUser = async (id, updateObj) => {
-  return await User.findByIdAndUpdate(id, updateObj);
+module.exports.sendRequest = async (loginUserId, friendId) => {
+  try {
+    const myUser = await User.findById(loginUserId);
+    const friendUser = await User.findById(friendId);
+
+    if (myUser.friends.myFriends.includes(friendId))
+      throw new Error('Already added to your Friend list');
+
+    myUser.friends.mySentRequests.push(friendUser._id);
+    friendUser.friends.myFriendRequests.push(myUser._id);
+
+    await friendUser.save();
+    await myUser.save();
+
+    return { status: 200, message: 'Friend request sent' };
+  } catch (error) {
+    return { status: 400, message: 'Already in your friend list' };
+  }
+};
+
+module.exports.confirmRequest = async (loginUserId, friendId) => {
+  try {
+    const myUser = await User.findById(loginUserId);
+    const friendUser = await User.findById(friendId);
+
+    if (myUser.friends.myFriends.includes(friendId))
+      throw new Error('Already added to your Friend list');
+
+    //   remove from requests array
+    myUser.friends.mySentRequests.pull(friendUser._id);
+    friendUser.friends.myFriendRequests.pull(myUser._id);
+    //   add to friend array
+    myUser.friends.myFriends.push(friendUser._id);
+    friendUser.friends.myFriends.push(myUser._id);
+
+    return { status: 200, message: 'Request Confirmed' };
+  } catch (error) {
+    return { status: 400, message: 'Already in your friend list' };
+  }
+};
+
+module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
+  try {
+    const myUser = await User.findById(loginUserId);
+    const friendUser = await User.findById(friendId);
+
+    if (myUser.friends.myFriends.includes(friendId))
+      return { status: 400, message: 'Already in your Friend list' };
+
+    //   remove from requests array
+    myUser.friends.mySentRequests.pull(friendUser._id);
+    friendUser.friends.myFriendRequests.pull(myUser._id);
+
+    myUser.friends.myFriendRequests.pull(friendUser._id);
+    friendUser.friends.mySentRequests.pull(myUser._id);
+
+    await friendUser.save();
+    await myUser.save();
+
+    return { status: 200, message: 'friend request cancelled' };
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
 };
