@@ -3,6 +3,7 @@ const user = require('../controllers/user.controller');
 
 router.get('/', user.getAll);
 
+router.get('/:id', user.getUser);
 router.post('/sendRequest/:id', user.sendRequest);
 router.post('/confirmRequest/:id', user.confirmRequest);
 router.post('/deleteRequest/:id', user.deleteOrCancelRequest);

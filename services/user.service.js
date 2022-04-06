@@ -1,7 +1,20 @@
+const { default: mongoose } = require('mongoose');
 let User = require('../models/user.model');
 
 module.exports.getAll = async () => {
-  return await User.find();
+  try {
+    return await User.find();
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
+};
+
+module.exports.getSpecificUser = async (user_id) => {
+  try {
+    return await User.findById(user_id);
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
 };
 
 module.exports.updateUser = async (id, updateObj) => {

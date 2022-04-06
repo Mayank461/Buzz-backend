@@ -5,6 +5,11 @@ module.exports.getAll = async (req, res) => {
   res.send(result);
 };
 
+module.exports.getUser = async (req, res) => {
+  const result = await user.getSpecificUser(req.params.id);
+  res.send(result);
+};
+
 module.exports.sendRequest = async (req, res) => {
   const result = await user.sendRequest(req.user.id, req.params.id);
   res.sendStatus(result.status);
