@@ -12,17 +12,17 @@ module.exports.getUser = async (req, res) => {
 
 module.exports.sendRequest = async (req, res) => {
   const result = await user.sendRequest(req.user.id, req.params.id);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.confirmRequest = async (req, res) => {
   const result = await user.confirmRequest(req.user.id, req.params.id);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.deleteOrCancelRequest = async (req, res) => {
   const result = await user.deleteOrCancelRequest(req.user.id, req.params.id);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.updateProfile = async (req, res) => {
