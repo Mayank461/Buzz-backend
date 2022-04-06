@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session');
 require('dotenv').config();
 const cors = require('cors');
 const { CLIENT_URL } = require('./config');
+const passport = require('passport');
 
 const app = express();
 
@@ -17,17 +18,20 @@ app.use(
 );
 
 const session = cookieSession({
-  secret: 'sessionSecret',
+  secret: 'Session Secret',
   resave: true,
   saveUninitialized: true,
   cookie: {
+    secure: true,
     secureProxy: true,
-    httpOnly: true,
     expires: 24 * 60 * 60 * 100,
   },
 });
 
 app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

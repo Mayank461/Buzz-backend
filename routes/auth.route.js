@@ -3,7 +3,6 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
-
 const user = require('../models/user.model');
 const { API_URL, CLIENT_URL } = require('../config');
 
@@ -81,11 +80,8 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
-router.use(passport.initialize());
-router.use(passport.session());
-
 router.post('/login', passport.authenticate('local'), (req, res) =>
-  res.send('success')
+  res.send({ success: true, user: req.user })
 );
 
 router.get(
@@ -105,8 +101,8 @@ router.get(
 
 router.get('/login/success', (req, res) => {
   if (req.user) {
-    res.json({ user: req.user, success: true });
-  } else res.json({ success: false });
+    res.send({ success: true, user: req.user });
+  } else res.send({ success: false });
 });
 
 router.get('/logout', (req, res) => {

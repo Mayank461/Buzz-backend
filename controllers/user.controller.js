@@ -35,3 +35,8 @@ module.exports.updateProfile = async (req, res) => {
   const result = await user.updateUser(req.user.id, update);
   res.sendStatus(result.status);
 };
+
+module.exports.suggestUsers = async (req, res) => {
+  const result = await user.suggestUsers(req.user.id);
+  res.send(result);
+};

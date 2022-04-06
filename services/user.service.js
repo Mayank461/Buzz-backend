@@ -77,3 +77,20 @@ module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
     return { status: 400, message: error.message };
   }
 };
+
+module.exports.suggestUsers = async (id) => {
+  try {
+    const myUser = await User.findById(id);
+
+    const ignoreFriendId = [
+      id,
+      ...myUser.friends.myFriends,
+      ...myUser.friends.mySentRequests,
+      ...myUser.friends.myFriendRequests,
+    ];
+
+    return await User.find({ _id: { $nin: ignoreFriendId } });
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
+};
