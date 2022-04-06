@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const app = express();
-require('dotenv').config();
-const user = require('./models/userModel');
-const cors = require('cors');
 const cookieSession = require('cookie-session');
+require('dotenv').config();
+const cors = require('cors');
 const { CLIENT_URL } = require('./config');
+const passport = require('passport');
+
+const app = express();
 
 // middleware
-
 app.use(
   cors({
     origin: CLIENT_URL,
@@ -18,17 +18,20 @@ app.use(
 );
 
 const session = cookieSession({
-  secret: 'sessionSecret',
+  secret: 'Session Secret',
   resave: true,
   saveUninitialized: true,
   cookie: {
+    secure: true,
     secureProxy: true,
-    httpOnly: true,
     expires: 24 * 60 * 60 * 100,
   },
 });
 
 app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
