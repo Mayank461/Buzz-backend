@@ -32,7 +32,7 @@ module.exports.updateProfile = async (req, res) => {
     state: req.body.state,
     zip: req.body.zip,
   };
-  const result = await user.updateUser(req.user.id, update);
+  const result = await user.updateUser(req.params.id, update);
   res.sendStatus(result.status);
 };
 

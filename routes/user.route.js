@@ -7,7 +7,7 @@ router.post('/sendRequest/:id', user.sendRequest);
 router.post('/confirmRequest/:id', user.confirmRequest);
 router.post('/deleteRequest/:id', user.deleteOrCancelRequest);
 
-router.post('/updateUser', user.updateProfile);
+router.post('/updateUser/:id', user.updateProfile);
 
 router.get('/suggestions/:id', user.suggestUsers);
 
