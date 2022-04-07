@@ -3,12 +3,13 @@ const user = require('../controllers/user.controller');
 
 router.get('/', user.getAll);
 
-router.post('/sendRequest/:id', user.sendRequest);
-router.post('/confirmRequest/:id', user.confirmRequest);
-router.post('/deleteRequest/:id', user.deleteOrCancelRequest);
+router.get('/:id', user.getUser);
+router.get('/sendRequest/:id', user.sendRequest);
+router.get('/confirmRequest/:id', user.confirmRequest);
+router.get('/deleteRequest/:id', user.deleteOrCancelRequest);
 
 router.post('/updateUser/:id', user.updateProfile);
 
-router.get('/suggestions/:id', user.suggestUsers);
+router.get('/friends/suggestions', user.suggestUsers);
 
 module.exports = router;

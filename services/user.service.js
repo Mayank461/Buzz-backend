@@ -1,7 +1,20 @@
+const { default: mongoose } = require('mongoose');
 let User = require('../models/user.model');
 
 module.exports.getAll = async () => {
-  return await User.find();
+  try {
+    return await User.find();
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
+};
+
+module.exports.getSpecificUser = async (user_id) => {
+  try {
+    return await User.findById(user_id);
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
 };
 
 module.exports.updateUser = async (id, updateObj) => {
@@ -19,6 +32,9 @@ module.exports.sendRequest = async (loginUserId, friendId) => {
     const myUser = await User.findById(loginUserId);
     const friendUser = await User.findById(friendId);
 
+    if (myUser.friends.mySentRequests.includes(friendId))
+      throw new Error('Request is Pending');
+
     if (myUser.friends.myFriends.includes(friendId))
       throw new Error('Already added to your Friend list');
 
@@ -30,11 +46,12 @@ module.exports.sendRequest = async (loginUserId, friendId) => {
 
     return { status: 200, message: 'Friend request sent' };
   } catch (error) {
-    return { status: 400, message: 'Already in your friend list' };
+    return { status: 400, message: error.message };
   }
 };
 
 module.exports.confirmRequest = async (loginUserId, friendId) => {
+  console.log(loginUserId, friendId);
   try {
     const myUser = await User.findById(loginUserId);
     const friendUser = await User.findById(friendId);
@@ -42,16 +59,22 @@ module.exports.confirmRequest = async (loginUserId, friendId) => {
     if (myUser.friends.myFriends.includes(friendId))
       throw new Error('Already added to your Friend list');
 
-    //   remove from requests array
+    //remove from requests friends array
     myUser.friends.mySentRequests.pull(friendUser._id);
+    myUser.friends.myFriendRequests.pull(friendUser._id);
+    friendUser.friends.mySentRequests.pull(myUser._id);
     friendUser.friends.myFriendRequests.pull(myUser._id);
+
     //   add to friend array
     myUser.friends.myFriends.push(friendUser._id);
     friendUser.friends.myFriends.push(myUser._id);
 
+    await myUser.save();
+    await friendUser.save();
+
     return { status: 200, message: 'Request Confirmed' };
   } catch (error) {
-    return { status: 400, message: 'Already in your friend list' };
+    return { status: 400, message: error.message };
   }
 };
 
@@ -65,9 +88,8 @@ module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
 
     //   remove from requests array
     myUser.friends.mySentRequests.pull(friendUser._id);
-    friendUser.friends.myFriendRequests.pull(myUser._id);
-
     myUser.friends.myFriendRequests.pull(friendUser._id);
+    friendUser.friends.myFriendRequests.pull(myUser._id);
     friendUser.friends.mySentRequests.pull(myUser._id);
 
     await friendUser.save();
@@ -79,12 +101,12 @@ module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
   }
 };
 
-module.exports.suggestUsers = async (id) => {
+module.exports.suggestUsers = async (uid) => {
   try {
-    const myUser = await User.findById(id);
+    const myUser = await User.findById(uid);
 
     const ignoreFriendId = [
-      id,
+      uid,
       ...myUser.friends.myFriends,
       ...myUser.friends.mySentRequests,
       ...myUser.friends.myFriendRequests,
