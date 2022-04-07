@@ -82,12 +82,11 @@ module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
     const myUser = await User.findById(loginUserId);
     const friendUser = await User.findById(friendId);
 
-    if (myUser.friends.myFriends.includes(friendId))
-      return { status: 400, message: 'Already in your Friend list' };
-
     //   remove from requests array
     myUser.friends.mySentRequests.pull(friendUser._id);
     myUser.friends.myFriendRequests.pull(friendUser._id);
+    myUser.friends.myFriends.pull(friendUser._id);
+    friendUser.friends.myFriends.pull(myUser._id);
     friendUser.friends.myFriendRequests.pull(myUser._id);
     friendUser.friends.mySentRequests.pull(myUser._id);
 
