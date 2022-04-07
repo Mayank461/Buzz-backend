@@ -1,8 +1,8 @@
-let User = require('../models/user.model');
+let post = require('../models/user.model');
 
 module.exports.updatePost = async (id, pic_url, caption) => {
   try {
-    await post.updatePost(id, {
+    await post.updateOne({_id: id}, {
       $push: {
         posts: {
           $each: [
@@ -18,5 +18,6 @@ module.exports.updatePost = async (id, pic_url, caption) => {
     return { status: 200 };
   } catch (error) {
     return { status: 400, message: error.message };
+
   }
 };

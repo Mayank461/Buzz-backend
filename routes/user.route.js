@@ -8,7 +8,7 @@ router.get('/sendRequest/:id', user.sendRequest);
 router.get('/confirmRequest/:id', user.confirmRequest);
 router.get('/deleteRequest/:id', user.deleteOrCancelRequest);
 
-router.post('/updateUser', user.updateProfile);
+router.post('/updateUser/:id', user.updateProfile);
 
 router.get('/friends/suggestions', user.suggestUsers);
 
