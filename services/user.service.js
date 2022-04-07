@@ -50,7 +50,6 @@ module.exports.sendRequest = async (loginUserId, friendId) => {
 };
 
 module.exports.confirmRequest = async (loginUserId, friendId) => {
-  console.log(loginUserId, friendId);
   try {
     const myUser = await User.findById(loginUserId);
     const friendUser = await User.findById(friendId);
