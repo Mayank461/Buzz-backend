@@ -10,6 +10,6 @@ router.get('/deleteRequest/:id', user.deleteOrCancelRequest);
 
 router.post('/updateUser', user.updateProfile);
 
-router.get('/suggestions/:id', user.suggestUsers);
+router.get('/friends/suggestions', user.suggestUsers);
 
 module.exports = router;

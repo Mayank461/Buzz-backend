@@ -100,12 +100,12 @@ module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
   }
 };
 
-module.exports.suggestUsers = async (id) => {
+module.exports.suggestUsers = async (uid) => {
   try {
-    const myUser = await User.findById(id);
+    const myUser = await User.findById(uid);
 
     const ignoreFriendId = [
-      id,
+      uid,
       ...myUser.friends.myFriends,
       ...myUser.friends.mySentRequests,
       ...myUser.friends.myFriendRequests,
