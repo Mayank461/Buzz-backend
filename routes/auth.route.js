@@ -31,10 +31,8 @@ passport.use(
             lastname: profile.name.familyName,
             picture_url: profile.photos[0].value,
             email: profile.emails[0].value,
-            googleId: profile.id,
             password: null,
             provider: 'google',
-            isVerified: true,
           }).save((err, data) => {
             return done(null, data);
           });
