@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema({
           type: Schema.Types.ObjectId, ref: 'user' 
         }
       ],
-      unlike:[
+      dislike:[
         {
           type: Schema.Types.ObjectId, ref: 'user' 
         }

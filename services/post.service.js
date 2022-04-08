@@ -15,35 +15,47 @@ module.exports.updatePost = async (id, pic_url, caption) => {
 
   }
 };
-
-module.exports.inclike = async (id) => {
+module.exports.getPost = async (ids) => {
   try {
-    // post.findOneAndUpdate(id,{
-    //   $push:{like:id}
-    // },{
-    //   new:true
-    // }).exec((err,result)=> {
-    //   if(err){
-    //     return res.status(404).json({error:error})
-    //   }else{
-    //     console.log(result)
-    //   }
-    // }) 
-    await post.findByIdAndUpdate({_id: id}, {
-      $push: {
-        posts: {        
-            $each: [
-              {
-                like: id
-              },
-            ],                  
-        },
-      },
-    });
-    
+    // let newpost = newpost.  
+   return await post.find({
+    posted_by: {
+        $in: ids
+      }
+    }).populate({
+      path: "posted_by"
+    });    
+  } catch (error) {
+    return { status: 400, message: error.message };
 
-    return { status: 200 }; 
+  }
+};
+
+
+module.exports.inclike = async (id,user_id) => {
+  try {
+    const mypost =await post.findById(id)
+    mypost.like.includes(user_id)?
+    mypost.like.pull(user_id):
+    mypost.like.push(user_id)
+    await mypost.save();
+  
+  return {status:200}
   }catch(error) {
-    return {sataus:404, message: error.message}
+    console.log(error);
+  }
+}
+
+module.exports.dislike = async (id,user_id) => {
+  try {
+    const mypost =await post.findById(id)
+    mypost.dislike.includes(user_id)?
+    mypost.dislike.pull(user_id):
+    mypost.dislike.push(user_id)
+    await mypost.save();
+  
+  return {status:200}
+  }catch(error) {
+    console.log(error);
   }
 }
