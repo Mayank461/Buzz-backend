@@ -9,8 +9,7 @@ module.exports.updateUser = async (id, updateObj) => {
     await User.findByIdAndUpdate(id, updateObj);
     return { status: 200 };
   } catch (error) {
-    console.log(error.message);
-    return { status: 400, message: error.message };
+      return { status: 400, message: error.message };
   }
 };
 

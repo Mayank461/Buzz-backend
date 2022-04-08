@@ -10,13 +10,7 @@ const userSchema = new mongoose.Schema({
   designation: String,
   provider: String,
   isVerified: String,
-  picture_url: String,
-  posts: [
-    {
-      post_url: { type: String },
-      post_caption: { type: String },
-    },
-  ],
+  picture_url: String,    
   cover_url: String,
   bio: String,
   gender: String,
