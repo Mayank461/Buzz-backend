@@ -21,11 +21,6 @@ const session = cookieSession({
   secret: 'Session Secret',
   resave: true,
   saveUninitialized: true,
-  cookie: {
-    secure: true,
-    secureProxy: true,
-    expires: 24 * 60 * 60 * 100,
-  },
 });
 
 app.use(session);
