@@ -24,6 +24,3 @@ module.exports.unlike = async (req,res) => {
   res.sendStatus(result.status);
 }
 
-module.exports.comment = async (req,res) => {
-  res.send('hi');
-}

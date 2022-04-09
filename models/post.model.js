@@ -20,10 +20,15 @@ const postSchema = new mongoose.Schema({
       ],
       comment:[
         {
-          type: Schema.Types.ObjectId, 
-          ref: 'user',
-          message: String 
-        }
+          
+          // type: Schema.Types.ObjectId,
+        
+          // ref: 'user',
+          
+         
+        },
+     
+        
       ],
 })  
 
