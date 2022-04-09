@@ -59,3 +59,23 @@ module.exports.dislike = async (id,user_id) => {
     console.log(error);
   }
 }
+
+module.exports.comment = async (id,message,user_id,picture_url) => {
+  try {
+    const mypost =await post.findById(id)
+    mypost.comment.push({user_id,message,picture_url})
+    // mypost.comment.includes(user_id,{message})?
+    // mypost.comment.pull(user_id,{message}):
+    // mypost.comment.push(user_id,{message})
+    await mypost.save();
+    // console.log(id);
+    // console.log(message);
+    // console.log(user_id);
+    // console.log(picture_url);
+
+  
+  return {status:200}
+  }catch(error) {
+    console.log(error);
+  }
+}
