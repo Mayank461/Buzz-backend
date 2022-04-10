@@ -27,5 +27,11 @@ module.exports.unlike = async (req,res) => {
 module.exports.comment = async (req,res) => {
   const result = await post.comment(req.body.post_id,req.body.comment.message,req.user.id,req.user.picture_url);
   res.sendStatus(result.status);
-  // console.log(req.user.picture_url);
+  // console.log(req.body);
 }
+module.exports.report = async (req,res) => {
+  const result = await post.report(req.body.post_id,req.user.id);
+  res.sendStatus(result.status);
+//  console.log(req.body);
+}
+

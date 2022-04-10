@@ -19,6 +19,9 @@ const postSchema = new mongoose.Schema({
         }
       ],
       comment:[{}],
+      report:[{
+        type: Schema.Types.ObjectId, ref: 'user' 
+      }]
 })  
 
 module.exports = mongoose.model('post', postSchema);
