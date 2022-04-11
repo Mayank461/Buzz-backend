@@ -1,5 +1,17 @@
 const post = require('../services/post.service');
 
+module.exports.allPost = async (req, res) => {  
+  const result = await post.allPost();
+  res.send(result);
+
+};
+module.exports.delReport = async (req, res) => {
+  const user_id  = req.body.id;  
+  const result = await post.delReport(user_id);
+  // console.log(user_id)
+  res.sendStatus(result.status);
+};
+
 module.exports.updatePost = async (req, res) => {
   const { pic_url, caption, user_id } = req.body;  
   const result = await post.updatePost(user_id, pic_url, caption);

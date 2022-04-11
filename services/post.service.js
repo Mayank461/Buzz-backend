@@ -1,5 +1,34 @@
-let post = require('../models/post.model');
+
 let user = require('../models/user.model');
+let post = require('../models/post.model');
+
+module.exports.allPost = async () => {
+  try {
+
+    return await post.find();
+   
+  } catch (error) {
+    return { status: 400, message: error.message };
+
+  }
+};
+
+module.exports.delReport = async (id) => {
+ 
+  try {
+    // let newpost = newpost.  
+
+     await post.deleteOne({_id:id});
+     console.log("deleted success")
+    
+   
+
+    return { status: 200 };
+  } catch (error) {
+    return { status: 400, message: error.message };
+
+  }
+};
 
 module.exports.updatePost = async (id, pic_url, caption) => {
   try {

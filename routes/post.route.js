@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const post = require('../controllers/post.controller');
 
+router.get('/allPost', post.allPost);
+router.post('/delReport', post.delReport);
 router.post('/userPost', post.updatePost);
 router.get('/getPost', post.getPost);
 router.post('/changeprofile',post.changeprofile);

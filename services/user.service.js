@@ -1,6 +1,6 @@
 const { default: mongoose } = require('mongoose');
 let User = require('../models/user.model');
-
+let Post = require('../models/post.model');
 module.exports.getAll = async () => {
   try {
     return await User.find();
