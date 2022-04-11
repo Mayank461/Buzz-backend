@@ -20,12 +20,12 @@ module.exports.getPost = async (req, res) => {
 
 module.exports.like = async (req, res) => {
   const result = await post.inclike(req.body.post_id, req.user.id);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.unlike = async (req, res) => {
   const result = await post.dislike(req.body.post_id, req.user.id);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.comment = async (req, res) => {
@@ -35,7 +35,7 @@ module.exports.comment = async (req, res) => {
     req.user.id,
     req.user.picture_url
   );
-  res.sendStatus(result.status);
+  res.send(result);
   // console.log(req.body);
 };
 module.exports.report = async (req, res) => {

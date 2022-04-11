@@ -37,13 +37,14 @@ module.exports.getPost = async (ids, page, limit) => {
 
 module.exports.inclike = async (id, user_id) => {
   try {
-    const mypost = await post.findById(id);
+    const mypost = await post.findById(id).populate({
+      path: 'posted_by',
+    });
     mypost.like.includes(user_id)
       ? mypost.like.pull(user_id)
       : mypost.like.push(user_id);
     await mypost.save();
-
-    return { status: 200 };
+    return mypost;
   } catch (error) {
     console.log(error);
   }
@@ -51,13 +52,15 @@ module.exports.inclike = async (id, user_id) => {
 
 module.exports.dislike = async (id, user_id) => {
   try {
-    const mypost = await post.findById(id);
+    const mypost = await post.findById(id).populate({
+      path: 'posted_by',
+    });
     mypost.dislike.includes(user_id)
       ? mypost.dislike.pull(user_id)
       : mypost.dislike.push(user_id);
     await mypost.save();
 
-    return { status: 200 };
+    return mypost;
   } catch (error) {
     console.log(error);
   }
@@ -65,11 +68,13 @@ module.exports.dislike = async (id, user_id) => {
 
 module.exports.comment = async (id, message, user_id, picture_url) => {
   try {
-    const mypost = await post.findById(id);
+    const mypost = await post.findById(id).populate({
+      path: 'posted_by',
+    });
     mypost.comment.push({ user_id, message, picture_url });
     await mypost.save();
 
-    return { status: 200 };
+    return mypost;
   } catch (error) {
     console.log(error);
   }
@@ -78,7 +83,9 @@ module.exports.report = async (id, user_id) => {
   try {
     // console.log(id);
     // console.log(user_id);
-    const mypost = await post.findById(id);
+    const mypost = await post.findById(id).populate({
+      path: 'posted_by',
+    });
     mypost.report.push(user_id);
     await mypost.save();
 
