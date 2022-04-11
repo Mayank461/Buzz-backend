@@ -1,6 +1,5 @@
 const post = require('../services/post.service');
 
-
 module.exports.updatePost = async (req, res) => {
   const { pic_url, caption, user_id } = req.body;  
   const result = await post.updatePost(user_id, pic_url, caption);
@@ -9,6 +8,19 @@ module.exports.updatePost = async (req, res) => {
 
 module.exports.getPost = async (req, res) => {  
   const result = await post.getPost([req.user.id,...req.user.friends.myFriends]);
+  res.send(result);
+
+};
+
+module.exports.changeprofile = async (req, res) => {
+  const { pic_url, user_id } = req.body;  
+  const result = await post.changeprofile(user_id, pic_url);
+  // console.log(req.body);
+  res.sendStatus(result.status);
+};
+
+module.exports.getchangeprofile = async (req, res) => {  
+  const result = await post.getPost([req.user.id]);
   res.send(result);
 
 };

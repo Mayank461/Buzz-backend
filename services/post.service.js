@@ -1,4 +1,5 @@
 let post = require('../models/post.model');
+let user = require('../models/user.model');
 
 module.exports.updatePost = async (id, pic_url, caption) => {
   try {
@@ -30,7 +31,37 @@ module.exports.getPost = async (ids) => {
 
   }
 };
+module.exports.changeprofile = async (user_id,pic_url) => {
+  try {
+    // let newpost = newpost.  
+    await user.findByIdAndUpdate(user_id,{
+     picture_url: pic_url
+   });
+  //  console.log(pic);
 
+    return { status: 200 };
+  } catch (error) {
+    return { status: 400, message: error.message };
+
+  }
+};
+module.exports.getchangeprofile = async (ids) => {
+  try {
+    //let newpost = newpost.  
+   return await user.find({
+    posted_by: {
+        $in: ids
+      }
+    }).populate({
+      path: "posted_by"
+    }); 
+  // return await user.findById(ids)
+  // console.log(ids);   
+  } catch (error) {
+    return { status: 400, message: error.message };
+
+  }
+};
 
 module.exports.inclike = async (id,user_id) => {
   try {
