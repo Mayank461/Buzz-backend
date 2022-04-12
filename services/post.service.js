@@ -147,6 +147,7 @@ module.exports.report = async (id, user_id) => {
     const mypost = await post.findById(id).populate({
       path: 'posted_by',
     });
+    mypost.report.includes(user_id)?"":
     mypost.report.push(user_id);
     await mypost.save();
 
