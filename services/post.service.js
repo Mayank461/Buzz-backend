@@ -1,11 +1,12 @@
 
 let user = require('../models/user.model');
 let post = require('../models/post.model');
+let reportData = require('../models/admin.model');
 
 module.exports.allPost = async () => {
   try {
 
-    return await post.find();
+    return await reportData.find();
    
   } catch (error) {
     return { status: 400, message: error.message };
@@ -13,12 +14,14 @@ module.exports.allPost = async () => {
   }
 };
 
-module.exports.delReport = async (id) => {
+module.exports.delReport = async (id,post_uid) => {
  
   try {
+ 
     // let newpost = newpost.  
-
-     await post.deleteOne({_id:id});
+    //  console.log(id)
+     await reportData.deleteOne({_id:id});
+     await post.deleteOne({_id:post_uid});
     
    
 
@@ -140,16 +143,28 @@ module.exports.comment = async (id, message, user_id, picture_url) => {
     console.log(error);
   }
 };
-module.exports.report = async (id, user_id) => {
+module.exports.report = async (data, user_id) => {
   try {
-    // console.log(id);
+    // console.log(data.data.post_url);
     // console.log(user_id);
-    const mypost = await post.findById(id).populate({
-      path: 'posted_by',
-    });
-    mypost.report.includes(user_id)?"":
-    mypost.report.push(user_id);
-    await mypost.save();
+    const report_person = await user.findById(user_id);
+    const existPost = await reportData.findOne({reported_by:user_id,post_url:data.data.post_url});
+   
+      if(existPost===null)
+      {
+ await reportData({
+      post_uid:data.data._id,
+      post_url: data.data.post_url,
+      posted_by: data.data.posted_by,
+      post_caption:data.data.post_caption,
+      reported_by:report_person
+    }).save();
+
+    return { status: 200 };
+      }
+      else{
+
+      }
 
     return { status: 200 };
   } catch (error) {
