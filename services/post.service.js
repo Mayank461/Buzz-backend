@@ -55,19 +55,7 @@ module.exports.getPost = async (ids, page, limit) => {
     return { status: 400, message: error.message };
   }
 };
-module.exports.changeprofile = async (user_id, pic_url) => {
-  try {
-    // let newpost = newpost.
-    await user.findByIdAndUpdate(user_id, {
-      picture_url: pic_url,
-    });
-    //  console.log(pic);
 
-    return { status: 200 };
-  } catch (error) {
-    return { status: 400, message: error.message };
-  }
-};
 module.exports.getchangeprofile = async (ids) => {
   try {
     //let newpost = newpost.
