@@ -1,28 +1,21 @@
-
 let user = require('../models/user.model');
 let post = require('../models/post.model');
 
 module.exports.allPost = async () => {
   try {
-
     return await post.find();
-   
   } catch (error) {
     return { status: 400, message: error.message };
-
   }
 };
 
 module.exports.delReport = async (id) => {
- 
   try {
      await post.deleteOne({_id:id}); 
-   
 
     return { status: 200 };
   } catch (error) {
     return { status: 400, message: error.message };
-
   }
 };
 
@@ -59,42 +52,18 @@ module.exports.getPost = async (ids, page, limit) => {
     return { status: 400, message: error.message };
   }
 };
-module.exports.changeprofile = async (user_id,pic_url) => {
-  try {     
-    await user.findByIdAndUpdate(user_id,{
-     picture_url: pic_url
-   });
-  
-    return { status: 200 };
-  } catch (error) {
-    return { status: 400, message: error.message };
-
-  }
-};
-module.exports.getchangeprofile = async (ids) => {
-  try {      
-   return await user.find({
-    posted_by: {
-        $in: ids
-      }
-    }).populate({
-      path: "posted_by"
-    });    
-  } catch (error) {
-    return { status: 400, message: error.message };
-
-  }
-};
-
 
 module.exports.inclike = async (id, user_id) => {
   try {
     const mypost = await post.findById(id).populate({
       path: 'posted_by',
     });
+
+    mypost.dislike.includes(user_id) && mypost.dislike.pull(user_id);
     mypost.like.includes(user_id)
       ? mypost.like.pull(user_id)
       : mypost.like.push(user_id);
+
     await mypost.save();
     return mypost;
   } catch (error) {
@@ -107,9 +76,13 @@ module.exports.dislike = async (id, user_id) => {
     const mypost = await post.findById(id).populate({
       path: 'posted_by',
     });
+
+    mypost.like.includes(user_id) && mypost.like.pull(user_id);
+
     mypost.dislike.includes(user_id)
       ? mypost.dislike.pull(user_id)
       : mypost.dislike.push(user_id);
+
     await mypost.save();
 
     return mypost;
@@ -136,8 +109,7 @@ module.exports.report = async (id, user_id) => {
     const mypost = await post.findById(id).populate({
       path: 'posted_by',
     });
-    mypost.report.includes(user_id)?"":
-    mypost.report.push(user_id);
+    mypost.report.includes(user_id) ? '' : mypost.report.push(user_id);
     await mypost.save();
 
     return { status: 200 };

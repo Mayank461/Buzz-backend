@@ -4,19 +4,21 @@ const bcrypt = require('bcrypt');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const user = require('../models/user.model');
-const { API_URL, CLIENT_URL } = require('../config');
-
-const clientID = process.env.G_CLIENT_ID;
-const clientSecret = process.env.G_CLIENT_SECRET;
+const {
+  API_URL,
+  CLIENT_URL,
+  G_CLIENT_ID,
+  G_CLIENT_SECRET,
+} = require('../config');
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID,
-      clientSecret,
+      clientID: G_CLIENT_ID,
+      clientSecret: G_CLIENT_SECRET,
       callbackURL: `${API_URL}/api/auth/google/callback`,
     },
-    (profile, done) => {
+    (accessToken, refreshToken, profile, done) => {
       // find if a user exist with this email or not
 
       user.findOne({ email: profile.emails[0].value }, (err, data) => {

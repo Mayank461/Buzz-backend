@@ -22,7 +22,7 @@ module.exports.updateUser = async (id, updateObj) => {
     await User.findByIdAndUpdate(id, updateObj);
     return { status: 200 };
   } catch (error) {
-      return { status: 400, message: error.message };
+    return { status: 400, message: error.message };
   }
 };
 
@@ -35,7 +35,7 @@ module.exports.sendRequest = async (loginUserId, friendId) => {
       throw new Error('Request is Pending');
 
     if (myUser.friends.myFriends.includes(friendId))
-      throw new Error('Already added to your Friend list');
+      throw new Error('Already in your Friend list');
 
     myUser.friends.mySentRequests.push(friendUser._id);
     friendUser.friends.myFriendRequests.push(myUser._id);
@@ -57,11 +57,8 @@ module.exports.confirmRequest = async (loginUserId, friendId) => {
     if (myUser.friends.myFriends.includes(friendId))
       throw new Error('Already added to your Friend list');
 
-    //remove from requests friends array
-    myUser.friends.mySentRequests.pull(friendUser._id);
     myUser.friends.myFriendRequests.pull(friendUser._id);
     friendUser.friends.mySentRequests.pull(myUser._id);
-    friendUser.friends.myFriendRequests.pull(myUser._id);
 
     //   add to friend array
     myUser.friends.myFriends.push(friendUser._id);

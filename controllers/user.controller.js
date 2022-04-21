@@ -12,23 +12,24 @@ module.exports.getUser = async (req, res) => {
 
 module.exports.sendRequest = async (req, res) => {
   const result = await user.sendRequest(req.user.id, req.params.id);
-  res.send(result);
+  res.status(result.status).send(result.message);
 };
 
 module.exports.confirmRequest = async (req, res) => {
   const result = await user.confirmRequest(req.user.id, req.params.id);
-  res.send(result);
+  res.status(result.status).send(result.message);
 };
 
 module.exports.deleteOrCancelRequest = async (req, res) => {
   const result = await user.deleteOrCancelRequest(req.user.id, req.params.id);
-  res.send(result);
+  res.status(result.status).send(result.message);
 };
 
 module.exports.updateProfile = async (req, res) => {
   const update = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    picture_url: req.body.pic_url,
     designation: req.body.designation,
     website: req.body.website,
     gender: req.body.gender,
@@ -37,6 +38,11 @@ module.exports.updateProfile = async (req, res) => {
     state: req.body.state,
     zip: req.body.zip,
   };
+
+  Object.keys(update).forEach(
+    (key) => typeof update[key] === 'undefined' && delete update[key]
+  );
+
   const result = await user.updateUser(req.params.id, update);
   res.sendStatus(result.status);
 };
