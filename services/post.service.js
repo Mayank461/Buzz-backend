@@ -16,10 +16,7 @@ module.exports.allPost = async () => {
 module.exports.delReport = async (id) => {
  
   try {
-    // let newpost = newpost.  
-
-     await post.deleteOne({_id:id});
-    
+     await post.deleteOne({_id:id}); 
    
 
     return { status: 200 };
@@ -30,8 +27,7 @@ module.exports.delReport = async (id) => {
 };
 
 module.exports.updatePost = async (id, pic_url, caption) => {
-  try {
-    // let newpost = newpost.
+  try {    
     await post({
       posted_by: id,
       post_url: pic_url,
@@ -64,13 +60,11 @@ module.exports.getPost = async (ids, page, limit) => {
   }
 };
 module.exports.changeprofile = async (user_id,pic_url) => {
-  try {
-    // let newpost = newpost.  
+  try {     
     await user.findByIdAndUpdate(user_id,{
      picture_url: pic_url
    });
-  //  console.log(pic);
-
+  
     return { status: 200 };
   } catch (error) {
     return { status: 400, message: error.message };
@@ -78,17 +72,14 @@ module.exports.changeprofile = async (user_id,pic_url) => {
   }
 };
 module.exports.getchangeprofile = async (ids) => {
-  try {
-    //let newpost = newpost.  
+  try {      
    return await user.find({
     posted_by: {
         $in: ids
       }
     }).populate({
       path: "posted_by"
-    }); 
-  // return await user.findById(ids)
-  // console.log(ids);   
+    });    
   } catch (error) {
     return { status: 400, message: error.message };
 
@@ -141,9 +132,7 @@ module.exports.comment = async (id, message, user_id, picture_url) => {
   }
 };
 module.exports.report = async (id, user_id) => {
-  try {
-    // console.log(id);
-    // console.log(user_id);
+  try {    
     const mypost = await post.findById(id).populate({
       path: 'posted_by',
     });
