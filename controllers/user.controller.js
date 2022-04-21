@@ -39,10 +39,6 @@ module.exports.updateProfile = async (req, res) => {
     zip: req.body.zip,
   };
 
-  Object.keys(update).forEach(
-    (key) => typeof update[key] === 'undefined' && delete update[key]
-  );
-
   const result = await user.updateUser(req.params.id, update);
   res.sendStatus(result.status);
 };
