@@ -1,9 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
-require('dotenv').config();
 const cors = require('cors');
-const { CLIENT_URL } = require('./config');
+const { CLIENT_URL, PORT, MONGO_URI } = require('./config');
 const passport = require('passport');
 
 const app = express();
@@ -33,10 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api', require('./routes/index'));
 
-mongoose.connect(process.env.MONGO_URI, (err) => {
+mongoose.connect(MONGO_URI, (err) => {
   !err && console.log('connected to database');
   err && console.log(err.message);
 });
 
-var PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Server running at port', PORT));
