@@ -16,11 +16,14 @@ app.use(
   })
 );
 
+app.set('trust proxy', 1);
 const session = cookieSession({
   secret: 'Session Secret',
   resave: true,
   saveUninitialized: true,
+  maxAge: 24 * 60 * 60 * 100,
   secure: true,
+  httpOnly: true,
   sameSite: 'none',
 });
 
