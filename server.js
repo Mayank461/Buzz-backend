@@ -25,6 +25,12 @@ const session = cookieSession({
 });
 
 app.use(session);
+
+app.use((req, res, next) => {
+  req['sessionCookies'].secure = true;
+  next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
