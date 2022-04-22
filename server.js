@@ -20,6 +20,8 @@ const session = cookieSession({
   secret: 'Session Secret',
   resave: true,
   saveUninitialized: true,
+  secure: true,
+  sameSite: 'none',
 });
 
 app.use(session);
