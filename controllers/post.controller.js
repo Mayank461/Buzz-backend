@@ -64,10 +64,9 @@ module.exports.comment = async (req, res) => {
     req.user.picture_url
   );
   res.send(result);
-  // console.log(req.body);
 };
 module.exports.report = async (req, res) => {
- 
+
   const result = await post.report(req.body, req.user.id);
   res.sendStatus(result.status);
  

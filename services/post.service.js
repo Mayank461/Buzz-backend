@@ -148,18 +148,16 @@ module.exports.report = async (data, user_id) => {
   try {
     var uid = mongoose.Types.ObjectId(user_id);
     const report_person = await user.findById(user_id);
-    const existPost = await reportData.findOne({"reported_by._id":uid,post_url:data.data.post_url});
-   
+    const existPost = await reportData.findOne({"reported_by._id":uid,post_url:data.data.post_url,post_caption:data.data.post_caption});
       if(existPost===null)
       {
- await reportData({
+      await reportData({
       post_uid:data.data._id,
       post_url: data.data.post_url,
       posted_by: data.data.posted_by,
       post_caption:data.data.post_caption,
       reported_by:report_person
     }).save();
-
     return { status: 200 };
       }
     return { status: 200 };
