@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
-const { CLIENT_URL, PORT, MONGO_URI } = require('./config');
+const { CLIENT_URL, PORT, MONGO_URI, cookie } = require('./config');
 const passport = require('passport');
 
 const app = express();
@@ -17,17 +17,7 @@ app.use(
 );
 
 app.set('trust proxy', 1);
-const session = cookieSession({
-  secret: 'Session Secret',
-  resave: true,
-  saveUninitialized: true,
-  maxAge: 24 * 60 * 60 * 100,
-  secure: true,
-  httpOnly: true,
-  sameSite: 'none',
-});
-
-app.use(session);
+app.use(cookieSession(cookie));
 app.use(passport.initialize());
 app.use(passport.session());
 
