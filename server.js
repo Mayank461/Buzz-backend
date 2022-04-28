@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
@@ -25,7 +26,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-
+app.use(express.static(path.join(__dirname,"./Buzz-frontend-main/build")));
+app.get("*",function(_,res){
+res.sendFile(path.join(__dirname,"./Buzz-frontend-main/build/index.html"),function(err){
+  if(err){
+    res.status(500).send(err);
+  }
+})
+})
 app.use('/api', require('./routes/index'));
 
 mongoose.connect(MONGO_URI, (err) => {
