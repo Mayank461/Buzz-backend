@@ -25,9 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get('/',(req,res)=>{
-  res.json("server start")
-})
+
 app.use('/api', require('./routes/index'));
 
 mongoose.connect(MONGO_URI, (err) => {
