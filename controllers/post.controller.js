@@ -6,7 +6,10 @@ module.exports.allPost = async (req, res) => {
 };
 module.exports.delReport = async (req, res) => {
   const user_id = req.body.id;
-  const result = await post.delReport(user_id);
+  const post_uid = req.body.post_uid;
+
+  const result = await post.delReport(user_id, post_uid);
+
   res.sendStatus(result.status);
 };
 
@@ -45,9 +48,10 @@ module.exports.comment = async (req, res) => {
     req.user.id,
     req.user.picture_url
   );
-  res.send(result);  
+  res.send(result);
 };
+
 module.exports.report = async (req, res) => {
-  const result = await post.report(req.body.post_id, req.user.id);
-  res.sendStatus(result.status);  
+  const result = await post.report(req.body, req.user.id);
+  res.sendStatus(result.status);
 };
