@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 if (process.env.NODE_ENV === 'prod') {
+
   exports.PORT = process.env.PORT || 80;
   exports.API_URL = process.env.API_URL;
   exports.CLIENT_URL = process.env.CLIENT_URL;
@@ -20,6 +21,7 @@ if (process.env.NODE_ENV === 'prod') {
 }
 
 if (process.env.NODE_ENV === 'dev') {
+
   exports.PORT = process.env.PORT || 5000;
   exports.API_URL = 'http://localhost:' + this.PORT;
   exports.CLIENT_URL = 'http://localhost:3000';
