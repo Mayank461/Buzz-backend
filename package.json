@@ -87,7 +87,8 @@
     "utils-merge": "^1.0.1",
     "vary": "^1.1.2",
     "webidl-conversions": "^7.0.0",
-    "whatwg-url": "^11.0.0"
+    "whatwg-url": "^11.0.0",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.0"
