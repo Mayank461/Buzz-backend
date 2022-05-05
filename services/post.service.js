@@ -134,11 +134,13 @@ module.exports.report = async (data, user_id) => {
     console.log(error);
   }
 };
-module.exports.commentReply = async (data) => {
+module.exports.commentReply = async (data,user) => {
   try {
     var postid = mongoose.Types.ObjectId(data.post_id);
     var cmntid = mongoose.Types.ObjectId(data.commentId);
-    const postRec = await post.findOne({ "_id": postid })
+    const postRec = await post.findOne({ "_id": postid }).populate({
+      path: 'posted_by',
+    });
     postRec.comment[data.index].replyBy.push({ repliedMessage: data.reply.message,senderPic:data.senderPic});
     await postRec.save();
     return postRec;
@@ -146,12 +148,15 @@ module.exports.commentReply = async (data) => {
     console.log(error);
   }
 };
-module.exports.commentLike = async (data) => {
+module.exports.commentLike = async (data,userId) => {
   try {
 
     var postid = mongoose.Types.ObjectId(data.post_id);
-    var user = mongoose.Types.ObjectId(data.userId);
-    const postRec = await post.findOne({ "_id": postid })
+    var user = mongoose.Types.ObjectId(userId);
+    
+    const postRec = await post.findOne({ "_id": postid }).populate({
+      path: 'posted_by',
+    });
     postRec.comment[data.index].likes.includes(user)?postRec.comment[data.index].likes.pull(user):postRec.comment[data.index].likes.push(user);
     await postRec.save();
     return postRec;

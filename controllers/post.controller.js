@@ -57,11 +57,10 @@ module.exports.report = async (req, res) => {
 };
 module.exports.commentReply = async (req, res) => {
   // console.log(req.body);
-  const result = await post.commentReply(req.body);
+  const result = await post.commentReply(req.body,req.user.id);
   res.send(result);
 };
 module.exports.commentLike = async (req, res) => {
-  // console.log(req.body);
-  const result = await post.commentLike(req.body);
+  const result = await post.commentLike(req.body,req.user.id);
   res.send(result);
 };
