@@ -55,3 +55,13 @@ module.exports.report = async (req, res) => {
   const result = await post.report(req.body, req.user.id);
   res.sendStatus(result.status);
 };
+module.exports.commentReply = async (req, res) => {
+  // console.log(req.body);
+  const result = await post.commentReply(req.body);
+  res.send(result);
+};
+module.exports.commentLike = async (req, res) => {
+  // console.log(req.body);
+  const result = await post.commentLike(req.body);
+  res.send(result);
+};
