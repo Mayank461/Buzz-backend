@@ -47,3 +47,8 @@ module.exports.suggestUsers = async (req, res) => {
   const result = await user.suggestUsers(req.user.id);
   res.send(result);
 };
+
+module.exports.search = async (req, res) => {
+  const result = await user.searchUsers(req.query.query);
+  res.send(result);
+};
