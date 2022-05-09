@@ -56,7 +56,6 @@ module.exports.report = async (req, res) => {
   res.sendStatus(result.status);
 };
 module.exports.commentReply = async (req, res) => {
-  // console.log(req.body);
   const result = await post.commentReply(req.body,req.user.id);
   res.send(result);
 };

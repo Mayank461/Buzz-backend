@@ -70,7 +70,7 @@ module.exports.inclike = async (id, user_id) => {
     await mypost.save();
     return mypost;
   } catch (error) {
-    console.log(error);
+    return { status: 400, message: error.message };
   }
 };
 
@@ -131,7 +131,7 @@ module.exports.report = async (data, user_id) => {
     }
     return { status: 200 };
   } catch (error) {
-    console.log(error);
+    return { status: 400 };
   }
 };
 module.exports.commentReply = async (data,user) => {

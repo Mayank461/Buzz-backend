@@ -23,6 +23,7 @@
     "denque": "^2.0.1",
     "depd": "^1.1.2",
     "destroy": "^1.0.4",
+    "dotenv": "^16.0.0",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",
     "escape-html": "^1.0.3",
@@ -87,14 +88,16 @@
     "utils-merge": "^1.0.1",
     "vary": "^1.1.2",
     "webidl-conversions": "^7.0.0",
-    "whatwg-url": "^11.0.0",
-    "dotenv": "^16.0.0"
+    "whatwg-url": "^11.0.0"
   },
   "devDependencies": {
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "jest": "^28.1.0",
+    "sinon": "^14.0.0",
+    "superset": "^2.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watchAll",
     "start": "nodemon server.js"
   },
   "keywords": [],
