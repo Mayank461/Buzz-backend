@@ -19,7 +19,19 @@ module.exports.getSpecificUser = async (user_id) => {
 
 module.exports.updateUser = async (id, updateObj) => {
   try {
-    await User.findByIdAndUpdate(id, updateObj);
+     const update = {
+    firstname: updateObj.firstname,
+    lastname: updateObj.lastname,
+    picture_url: updateObj.pic_url,
+    designation: updateObj.designation,
+    website: updateObj.website,
+    gender:  updateObj.gender,
+    birthday: updateObj.birthday,
+    city: updateObj.city,
+    state: updateObj.state,
+    zip: updateObj.zip,
+  };
+    await User.findByIdAndUpdate(id, update);
     return { status: 200 };
   } catch (error) {
     return { status: 400, message: error.message };
@@ -43,7 +55,7 @@ module.exports.sendRequest = async (loginUserId, friendId) => {
     await friendUser.save();
     await myUser.save();
 
-    return { status: 200, message: 'Friend request sent' };
+    return { status: 200};
   } catch (error) {
     return { status: 400, message: error.message };
   }
@@ -67,7 +79,7 @@ module.exports.confirmRequest = async (loginUserId, friendId) => {
     await myUser.save();
     await friendUser.save();
 
-    return { status: 200, message: 'Request Confirmed' };
+    return { status: 200 };
   } catch (error) {
     return { status: 400, message: error.message };
   }
@@ -89,7 +101,7 @@ module.exports.deleteOrCancelRequest = async (loginUserId, friendId) => {
     await friendUser.save();
     await myUser.save();
 
-    return { status: 200, message: 'friend request cancelled' };
+    return { status: 200};
   } catch (error) {
     return { status: 400, message: error.message };
   }
