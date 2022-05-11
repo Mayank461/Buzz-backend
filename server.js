@@ -6,6 +6,22 @@ const { CLIENT_URL, PORT, MONGO_URI, cookie } = require('./config');
 const passport = require('passport');
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server,{
+  cors: {
+    origin: "*"
+  }
+});
+// =================Socket logic======================================
+io.on('connection',(socket)=>{
+   socket.on("join_room",(data)=>{
+     socket.join(data);
+   })
+   socket.on("send_message",(data)=>{
+   io.to(data.room).emit("recieve_message",data);
+   })
+})
+// =================Socket logic======================================
 
 // middleware
 app.use(
@@ -32,4 +48,4 @@ mongoose.connect(MONGO_URI, (err) => {
   err && console.log(err.message);
 });
 
-app.listen(PORT, () => console.log('Server running at port', PORT));
+server.listen(PORT, () => console.log('Server running at port', PORT));
