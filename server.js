@@ -32,4 +32,17 @@ mongoose.connect(MONGO_URI, (err) => {
   err && console.log(err.message);
 });
 
-app.listen(PORT, () => console.log('Server running at port', PORT));
+const server = app.listen(PORT, () =>
+  console.log('Server running at port', PORT)
+);
+
+const io = require('socket.io')();
+io.attach(server, { cors: { origin: CLIENT_URL } });
+
+io.on('connection', (socket) => {
+  socket.on('join', (room) => socket.join(room));
+
+  socket.on('send-message', (messageData, room) => {
+    socket.to(room).emit('receive-message', messageData);
+  });
+});
