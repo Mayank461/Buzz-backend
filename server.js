@@ -39,10 +39,25 @@ const server = app.listen(PORT, () =>
 const io = require('socket.io')();
 io.attach(server, { cors: { origin: CLIENT_URL } });
 
+const login_users = {};
+
 io.on('connection', (socket) => {
   socket.on('join', (room) => socket.join(room));
 
   socket.on('send-message', (messageData, room) => {
     socket.to(room).emit('receive-message', messageData);
+  });
+
+  socket.on('login', (uid) => {
+    if (uid) {
+      login_users[socket.id] = uid;
+      io.to(socket.id).emit('onlineList', Object.values(login_users));
+      socket.broadcast.emit('online', uid);
+    }
+  });
+
+  socket.on('disconnecting', () => {
+    socket.broadcast.emit('offline', login_users[socket.id]);
+    login_users[socket.id] && delete login_users[socket.id];
   });
 });
