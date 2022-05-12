@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const user = require('../services/user.service');
 
 module.exports.getAll = async (req, res) => {
@@ -6,7 +7,9 @@ module.exports.getAll = async (req, res) => {
 };
 
 module.exports.getUser = async (req, res) => {
-  const result = await user.getSpecificUser(req.params.id);
+  const user_id = mongoose.Types.ObjectId(req.params.id);
+
+  const result = await user.getSpecificUser(user_id);
   res.send(result);
 };
 
