@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const chat = require('../controllers/chat.controller');
+const authCheck = require('../middlewares/authCheck');
 
-router.post('/send', chat.sendMessage);
-router.get('/getByRoomID/:roomID', chat.getChatByRoomID);
+router.post('/send', authCheck, chat.sendMessage);
+router.get('/getByRoomID/:roomID', authCheck, chat.getChatByRoomID);
 
 module.exports = router;
