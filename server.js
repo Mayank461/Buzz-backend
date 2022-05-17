@@ -48,6 +48,13 @@ io.on('connection', (socket) => {
     socket.to(room).emit('receive-message', messageData);
   });
 
+  socket.on('notification', (notifyTo, message) => {
+    const notifySID = Object.keys(login_users).find(
+      (key) => login_users[key] === notifyTo
+    );
+    io.to(notifySID).emit('notification', message);
+  });
+
   socket.on('login', (uid) => {
     if (uid) {
       login_users[socket.id] = uid;
