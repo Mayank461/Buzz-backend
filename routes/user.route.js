@@ -9,5 +9,6 @@ router.get('/confirmRequest/:id', user.confirmRequest);
 router.get('/deleteRequest/:id', user.deleteOrCancelRequest);
 router.post('/updateUser/:id', bodyCleanup, user.updateProfile);
 router.get('/friends/suggestions', user.suggestUsers);
+router.get('/search/all', user.search);
 
 module.exports = router;

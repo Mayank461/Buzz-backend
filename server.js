@@ -18,13 +18,14 @@ io.on('connection', (socket) => {
     socket.join(data);
   })
   socket.on("send_message", async (data) => {
+    let index=-1;
   
 // ====================================for sender end  ======================================================================
     const senderId = mongoose.Types.ObjectId(data.senderId);
     const recieverId = mongoose.Types.ObjectId(data.recieverId);
     const message = data.message;
     const float = data.float;
-    const time = data.current_time;
+    const time = data.time;
     const details = await User.findById(senderId);
     const findData = await User.findOne({_id:senderId, conversations: { $elemMatch: { recieverId: recieverId } } });
     if (findData !== null) {
@@ -33,6 +34,7 @@ io.on('connection', (socket) => {
     }
     else {
       const conversationsLength = details.conversations.length;
+      index = conversationsLength;
       details.conversations.push({ recieverId });
       details.conversations[conversationsLength].chats.push({ message: message, float: float, time: time })
       details.save();
@@ -58,7 +60,7 @@ else {
 }
 
 // ====================================for reciever end  ======================================================================
-    io.to(data.room).emit("recieve_message", data);
+    io.to(data.room).emit("recieve_message", data,index);
   })
 })
 // =================Socket logic======================================

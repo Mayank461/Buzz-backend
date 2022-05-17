@@ -123,3 +123,18 @@ module.exports.suggestUsers = async (uid) => {
     return { status: 400, message: error.message };
   }
 };
+module.exports.searchUsers = async (text) => {
+  try {
+    return await User.find(
+      {
+        $or: [
+          { firstname: { $regex: `.*${text}.*` } },
+          { email: { $regex: `.*${text}.*` } },
+        ],
+      },
+      { password: 0, googleId: 0 }
+    );
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
+};
