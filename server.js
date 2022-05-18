@@ -55,6 +55,17 @@ io.on('connection', (socket) => {
     io.to(notifySID).emit('notification', message);
   });
 
+  socket.on('notification_newPost', (notifyTo, name) => {
+    Object.keys(login_users).forEach((key) => {
+      if (notifyTo.includes(login_users[key])) {
+        io.to(key).emit(
+          'notification_newPost',
+          `${name} just posted a new Post`
+        );
+      }
+    });
+  });
+
   socket.on('login', (uid) => {
     if (uid) {
       login_users[socket.id] = uid;
