@@ -14,12 +14,14 @@ const io = require('socket.io')(server, {
 });
 // =================Socket logic======================================
 io.on('connection', (socket) => {
+
   socket.on("join_room", (data) => {
+   
     socket.join(data);
   })
   socket.on("send_message", async (data) => {
     let index=-1;
-  
+
 // ====================================for sender end  ======================================================================
     const senderId = mongoose.Types.ObjectId(data.senderId);
     const recieverId = mongoose.Types.ObjectId(data.recieverId);
@@ -29,14 +31,25 @@ io.on('connection', (socket) => {
     const details = await User.findById(senderId);
     const findData = await User.findOne({_id:senderId, conversations: { $elemMatch: { recieverId: recieverId } } });
     if (findData !== null) {
-
+      if(data.pic === undefined){
       await User.updateOne({ _id: senderId, "conversations.recieverId": recieverId }, { "$push": { "conversations.$.chats": { message: message, float: float, time: time } } })
+      }
+      else{
+      await User.updateOne({ _id: senderId, "conversations.recieverId": recieverId }, { "$push": { "conversations.$.chats": { message: message, pic:data.pic, float: float, time: time } } })
+      }
+
+
     }
     else {
       const conversationsLength = details.conversations.length;
       index = conversationsLength;
       details.conversations.push({ recieverId });
-      details.conversations[conversationsLength].chats.push({ message: message, float: float, time: time })
+      if(data.pic === undefined){
+     details.conversations[conversationsLength].chats.push({ message: message, float: float, time: time })
+      }
+      else{
+     details.conversations[conversationsLength].chats.push({ message: message, pic:data.pic, float: float, time: time })
+      }
       details.save();
     }
 // ====================================for sender end  ======================================================================
@@ -47,12 +60,24 @@ try {
   const Recieverdetails = await User.findById(recieverId);
 const findData1 = await User.findOne({_id:recieverId, conversations: { $elemMatch: { recieverId: senderId } } });
 if (findData1 !== null) {
-  await User.updateOne({ _id: recieverId, "conversations.recieverId": senderId }, { "$push": { "conversations.$.chats": { message: message, float: false, time: time } } })
+  if(data.pic === undefined)
+  {
+    await User.updateOne({ _id: recieverId, "conversations.recieverId": senderId }, { "$push": { "conversations.$.chats": { message: message, float: false, time: time } } })
+  }
+  else{
+  await User.updateOne({ _id: recieverId, "conversations.recieverId": senderId }, { "$push": { "conversations.$.chats": { message: message,pic:data.pic, float: false, time: time } } })
+  }
 }
 else {
   const conversationsLength = Recieverdetails.conversations.length;
   Recieverdetails.conversations.push({ recieverId:senderId });
-  Recieverdetails.conversations[conversationsLength].chats.push({ message: message, float: false, time: time })
+  if(data.pic===undefined)
+  {
+    Recieverdetails.conversations[conversationsLength].chats.push({ message: message, float: false, time: time })
+  }
+  else{
+    Recieverdetails.conversations[conversationsLength].chats.push({ message: message,pic:data.pic, float: false, time: time })
+  }
   Recieverdetails.save();
 }
 } catch (error) {
@@ -61,6 +86,8 @@ else {
 
 // ====================================for reciever end  ======================================================================
     io.to(data.room).emit("recieve_message", data,index);
+  
+
   })
 })
 // =================Socket logic======================================

@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     mySentRequests: [{ type: Schema.Types.ObjectId, ref: 'user' }],
     myFriendRequests: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
-  conversations:[{recieverId:Object,chats:[{message:String,float:Boolean,time:String}]}],
+  conversations:[{recieverId:Object,chats:[{message:String,pic:String,float:Boolean,time:String}]}],
 });
 
 module.exports = mongoose.model('user', userSchema);
