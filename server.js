@@ -12,11 +12,12 @@ const io = require('socket.io')(server, {
     origin: "*"
   }
 });
+let room = "";
 // =================Socket logic======================================
 io.on('connection', (socket) => {
 
   socket.on("join_room", (data) => {
-   
+   room=data;
     socket.join(data);
   })
   socket.on("send_message", async (data) => {
@@ -89,6 +90,11 @@ else {
   
 
   })
+
+
+  socket.on("typing",(text)=>{
+    socket.to(room).emit("recieve_signal",text);
+})
 })
 // =================Socket logic======================================
 
