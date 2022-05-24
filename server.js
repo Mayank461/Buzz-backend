@@ -20,8 +20,8 @@ io.on('connection', (socket) => {
    room=data;
     socket.join(data);
   })
+  
   socket.on("send_message", async (data) => {
-    let index=-1;
 
 // ====================================for sender end  ======================================================================
     const senderId = mongoose.Types.ObjectId(data.senderId);
@@ -86,11 +86,8 @@ else {
 }
 
 // ====================================for reciever end  ======================================================================
-    io.to(data.room).emit("recieve_message", data,index);
-  
-
+    io.to(data.room).emit("recieve_message", data);
   })
-
 
   socket.on("typing",(text)=>{
     socket.to(room).emit("recieve_signal",text);
