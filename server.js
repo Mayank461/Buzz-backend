@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session');
 const cors = require('cors');
 const { CLIENT_URL, PORT, MONGO_URI, cookie } = require('./config');
 const passport = require('passport');
+const { sendMessage, seenMessages } = require('./services/chat.service');
 
 const app = express();
 
@@ -40,12 +41,28 @@ const io = require('socket.io')();
 io.attach(server, { cors: { origin: CLIENT_URL } });
 
 const login_users = {};
+// const inRoom = {};
 
+function roomCount(roomName) {
+  if (io.sockets.adapter.rooms.has(roomName))
+    return io.sockets.adapter.rooms.get(roomName).size;
+  return 0;
+}
 io.on('connection', (socket) => {
-  socket.on('join', (room) => socket.join(room));
+  socket.on('join', (room, myID) => {
+    socket.join(room);
+
+    seenMessages(room, myID);
+    io.to(room).emit('seen', room.split(myID).join('').split('-').join(''));
+  });
+  socket.on('leave', (room) => {
+    socket.leave(room);
+  });
 
   socket.on('send-message', (messageData, room) => {
-    socket.to(room).emit('receive-message', messageData);
+    if (roomCount(room) > 1) messageData.seen = true;
+    io.to(room).emit('receive-message', messageData);
+    sendMessage(room, messageData);
   });
 
   socket.on('notification', (notifyTo, message) => {

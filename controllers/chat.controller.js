@@ -8,9 +8,9 @@ module.exports.sendMessage = async (req, res) => {
   res.send(result);
 };
 
-module.exports.getChatByRoomID = async (req, res) => {
+module.exports.getMyRooms = async (req, res) => {
   const uid = req?.user?.id;
-  const roomID = req.params.roomID;
-  const result = await chat.getChatByRoomID(uid, roomID);
+
+  const result = await chat.getMyRooms(uid);
   res.send(result);
 };

@@ -10,6 +10,7 @@ const chatSchema = new mongoose.Schema(
         timestamp: { type: Date, default: Date.now },
         message: { required: true, type: String },
         sentBy: { required: true, type: Schema.Types.ObjectId, ref: 'user' },
+        seen: { type: Boolean, default: false },
       },
     ],
   },
