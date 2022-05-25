@@ -16,7 +16,7 @@ module.exports.delReport = async (req, res) => {
 module.exports.updatePost = async (req, res) => {
   const { pic_url, caption, user_id } = req.body;
   const result = await post.updatePost(user_id, pic_url, caption);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.getPost = async (req, res) => {

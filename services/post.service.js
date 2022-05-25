@@ -24,13 +24,13 @@ module.exports.delReport = async (id, post_uid) => {
 
 module.exports.updatePost = async (id, pic_url, caption) => {
   try {
-    await post({
+    const data = await post({
       posted_by: id,
       post_url: pic_url,
       post_caption: caption,
     }).save();
 
-    return { status: 200 };
+    return { status: 200, data };
   } catch (error) {
     return { status: 400, message: error.message };
   }
