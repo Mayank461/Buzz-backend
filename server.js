@@ -59,10 +59,19 @@ io.on('connection', (socket) => {
     socket.leave(room);
   });
 
-  socket.on('send-message', (messageData, room) => {
+  socket.on('send-message', async (messageData, room) => {
     if (roomCount(room) > 1) messageData.seen = true;
     io.to(room).emit('receive-message', messageData);
-    sendMessage(room, messageData);
+    await sendMessage(room, messageData);
+
+    if (roomCount(room) < 2) {
+      const notifySID = Object.keys(login_users).find(
+        (key) =>
+          login_users[key] ===
+          room.replace(messageData.sentBy, '').replace('-', '')
+      );
+      notifySID && socket.to(notifySID).emit('refreshRoomsData');
+    }
   });
 
   socket.on('notification', (notifyTo, message) => {
