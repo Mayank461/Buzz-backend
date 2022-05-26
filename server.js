@@ -92,6 +92,15 @@ else {
   socket.on("typing",(text)=>{
     socket.to(room).emit("recieve_signal",text);
 })
+
+socket.on('video-calling',(data)=>{
+  io.to(room).emit("accept-video",data);
+
+})
+socket.on('disconnect-call',(data)=>{
+  io.to(room).emit("disconnection-both",data);
+
+})
 })
 // =================Socket logic======================================
 
