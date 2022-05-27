@@ -93,8 +93,8 @@ else {
     socket.to(room).emit("recieve_signal",text);
 })
 
-socket.on('video-calling',(data)=>{
-  io.to(room).emit("accept-video",data);
+socket.on('video-calling',(stream)=>{
+  socket.to(room).emit("accept-video",stream);
 
 })
 socket.on('disconnect-call',(data)=>{
