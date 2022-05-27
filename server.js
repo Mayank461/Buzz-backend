@@ -17,8 +17,9 @@ let room = "";
 io.on('connection', (socket) => {
 
   socket.on("join_room", (data) => {
-   room=data;
-    socket.join(data);
+   room=data.room;
+    socket.join(data.room);
+    socket.to(data.room).emit("getPeerId", data);
   })
   
   socket.on("send_message", async (data) => {
