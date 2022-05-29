@@ -17,7 +17,7 @@ let room = "";
 io.on('connection', (socket) => {
 
   socket.on("join_room", (data) => {
-   room=data.room;
+    room=data.room;
     socket.join(data.room);
     socket.to(data.room).emit("getPeerId", data);
   })
