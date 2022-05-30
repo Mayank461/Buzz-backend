@@ -21,7 +21,9 @@ io.on('connection', (socket) => {
     socket.join(data.room);
     socket.to(data.room).emit("getPeerId", data);
   })
-  
+  socket.on('transfer', (data)=>{
+    io.emit('takeAway',data);
+  })
   socket.on("send_message", async (data) => {
 
 // ====================================for sender end  ======================================================================
@@ -39,8 +41,6 @@ io.on('connection', (socket) => {
       else{
       await User.updateOne({ _id: senderId, "conversations.recieverId": recieverId }, { "$push": { "conversations.$.chats": { message: message, pic:data.pic, float: float, time: time } } })
       }
-
-
     }
     else {
       const conversationsLength = details.conversations.length;
@@ -94,8 +94,8 @@ else {
     socket.to(room).emit("recieve_signal",text);
 })
 
-socket.on('video-calling',(stream)=>{
-  socket.to(room).emit("accept-video",stream);
+socket.on('video-calling',(data)=>{
+  socket.to(room).emit("accept-video",data);
 
 })
 socket.on('disconnect-call',(data)=>{
