@@ -51,9 +51,10 @@ function roomCount(roomName) {
 io.on('connection', (socket) => {
   socket.on('join', (room, myID) => {
     socket.join(room);
-
-    seenMessages(room, myID);
-    io.to(room).emit('seen', room.split(myID).join('').split('-').join(''));
+    if (myID) {
+      seenMessages(room, myID);
+      io.to(room).emit('seen', room.split(myID).join('').split('-').join(''));
+    }
   });
   socket.on('leave', (room) => {
     socket.leave(room);
@@ -90,6 +91,29 @@ io.on('connection', (socket) => {
         );
       }
     });
+  });
+
+  function findID(id) {
+    let res = null;
+    Object.keys(login_users).forEach((key) => {
+      if (login_users[key] === id) {
+        res = key;
+        return;
+      }
+    });
+    return res;
+  }
+
+  socket.on('CallNotify', (id, from) => {
+    io.to(findID(id)).emit('CallNotify', id, from);
+  });
+
+  socket.on('accept-video', (pid, id) => {
+    socket.to(findID(id)).emit('accept-video', pid);
+  });
+
+  socket.on('disconnect-call', (id, data) => {
+    socket.to(findID(id)).emit('disconnect-call', data);
   });
 
   socket.on('login', (uid) => {
