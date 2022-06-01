@@ -102,6 +102,10 @@ socket.on('disconnect-call',(data)=>{
   io.to(room).emit("disconnection-both",data);
 
 })
+socket.on('call-decline',(data)=>{
+  io.to(room).emit("call-rejected",data);
+
+})
 })
 // =================Socket logic======================================
 
