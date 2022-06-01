@@ -106,6 +106,10 @@ socket.on('call-decline',(data)=>{
   io.to(room).emit("call-rejected",data);
 
 })
+socket.on('connection-both',(data)=>{
+  io.to(room).emit("remove-call-panel",data);
+
+})
 })
 // =================Socket logic======================================
 
