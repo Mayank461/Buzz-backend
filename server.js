@@ -116,6 +116,10 @@ io.on('connection', (socket) => {
     socket.to(findID(id)).emit('disconnect-call', data);
   });
 
+  socket.on('camToggle', (id, data) => {
+    socket.to(findID(id)).emit('camToggle', data);
+  });
+
   socket.on('login', (uid) => {
     if (uid) {
       login_users[socket.id] = uid;

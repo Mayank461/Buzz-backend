@@ -11,6 +11,7 @@ const chatSchema = new mongoose.Schema(
         message: { required: true, type: String },
         sentBy: { required: true, type: Schema.Types.ObjectId, ref: 'user' },
         seen: { type: Boolean, default: false },
+        file: { type: String, required: false },
       },
     ],
   },
