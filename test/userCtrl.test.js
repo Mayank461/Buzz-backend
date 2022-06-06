@@ -112,7 +112,6 @@ describe('update profile block in post controller', () => {
         const mReply = { code: sinon.stub().returnsThis(), sendStatus: sinon.stub() };
         userController.updateProfile(mReq, mReply);
         await flushPromises();
-        // sinon.assert.calledWith(mReply.code, 200);
         sinon.assert.calledWith(mReply.sendStatus, 200);
       });
     
