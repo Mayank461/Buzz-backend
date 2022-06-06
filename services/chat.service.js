@@ -46,13 +46,13 @@ module.exports.sendMessage = async (roomID, messageData) => {
 module.exports.seenMessages = async (roomID, uid) => {
   try {
     const res = await chat.findById(roomID);
-    res.conversation.forEach((el) => {
-      if (el.sentBy.toString() !== uid && el.seen === false) el.seen = true;
+
+    res?.conversation?.forEach((el) => {
+      if (el?.sentBy.toString() !== uid && el.seen === false) el.seen = true;
     });
 
-    await res.save();
+    await res?.save();
   } catch (error) {
-    console.log(error.message);
     return { status: 400, message: error.message };
   }
 };
