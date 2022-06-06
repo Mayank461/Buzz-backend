@@ -24,13 +24,13 @@ module.exports.delReport = async (id, post_uid) => {
 
 module.exports.updatePost = async (id, pic_url, caption) => {
   try {
-    await post({
+    const data = await post({
       posted_by: id,
       post_url: pic_url,
       post_caption: caption,
     }).save();
 
-    return { status: 200 };
+    return { status: 200, data };
   } catch (error) {
     return { status: 400, message: error.message };
   }
@@ -43,9 +43,7 @@ module.exports.getPost = async (ids, page, limit) => {
           $in: ids,
         },
       })
-      .populate({
-        path: 'posted_by',
-      })
+      .populate('posted_by comment.reply.user_id', { password: 0 })
       .sort({
         _id: -1,
       })
@@ -100,6 +98,30 @@ module.exports.comment = async (id, message, user_id, picture_url) => {
       path: 'posted_by',
     });
     mypost.comment.push({ user_id, message, picture_url });
+    await mypost.save();
+
+    return mypost;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports.commentReply = async (id, commentIndex, message, user_id) => {
+  try {
+    const mypost = await post.findById(id).populate({
+      path: 'posted_by',
+    });
+
+    if (!mypost.comment[commentIndex].reply)
+      mypost.comment[commentIndex].reply = [];
+
+    mypost.comment[commentIndex].reply.push({
+      user_id,
+      message,
+      timestamp: Date.now(),
+      likes: [],
+    });
+
     await mypost.save();
 
     return mypost;

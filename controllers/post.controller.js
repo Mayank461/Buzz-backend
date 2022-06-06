@@ -16,7 +16,7 @@ module.exports.delReport = async (req, res) => {
 module.exports.updatePost = async (req, res) => {
   const { pic_url, caption, user_id } = req.body;
   const result = await post.updatePost(user_id, pic_url, caption);
-  res.sendStatus(result.status);
+  res.send(result);
 };
 
 module.exports.getPost = async (req, res) => {
@@ -47,6 +47,16 @@ module.exports.comment = async (req, res) => {
     req.body.comment.message,
     req.user.id,
     req.user.picture_url
+  );
+  res.send(result);
+};
+
+module.exports.commentReply = async (req, res) => {
+  const result = await post.commentReply(
+    req.body.post_id,
+    req.body.commentIndex,
+    req.body.message,
+    req.user.id
   );
   res.send(result);
 };
