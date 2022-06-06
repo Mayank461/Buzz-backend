@@ -9,5 +9,6 @@ router.post('/like', post.like);
 router.post('/unlike', post.unlike);
 router.post('/comment', post.comment);
 router.post('/report', post.report);
+router.post('/comment/reply', post.commentReply);
 
 module.exports = router;
